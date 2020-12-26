@@ -2,7 +2,6 @@ from typing import Optional
 
 import numpy
 import pandas
-import pystan
 
 from clv_model.clv_model.stan_model_meta import StanModelMeta
 from clv_model.clv_model.value_model.value_model import ValueModel
@@ -12,12 +11,10 @@ __all__ = ('GammaGammaModel',)
 
 class GammaGammaModel(ValueModel, metaclass=StanModelMeta):
     __model_name__ = 'gamma_gamma'
+
     p: Optional[numpy.ndarray] = None
     q: Optional[numpy.ndarray] = None
     mu: Optional[numpy.ndarray] = None
-
-    def __post_init__(self) -> None:
-        self._stan_model: Optional[pystan.StanModel] = None
 
     def predict(self, data: pandas.DataFrame) -> pandas.DataFrame:
         self._check_fit()
