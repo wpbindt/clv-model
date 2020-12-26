@@ -10,22 +10,17 @@ __all__ = ('StanModelMeta',)
 
 class StanModelMeta(ABCMeta):
     def __init__(cls, name, bases, dct):
-        cls = dataclass(cls)
-
         parameters = set(dct['__annotations__'])
+        try:
+            model_name = dct['__model_name__']
+        except KeyError:
+            raise ValueError('__model_name__ not specified.')
 
         def _is_fitted(self) -> bool:
             return all(
                 getattr(self, parameter) is not None
                 for parameter in parameters
             )
-
-        cls._is_fitted = _is_fitted
-
-        try:
-            model_name = dct['__model_name__']
-        except KeyError:
-            raise ValueError('__model_name__ not specified.')
 
         def _compile_stan_model(self) -> pystan.StanModel:
             with resources.open_text(
@@ -35,8 +30,6 @@ class StanModelMeta(ABCMeta):
                 self._stan_model = pystan.StanModel(model_file)
 
             return self._stan_model
-
-        cls._compile_stan_model = _compile_stan_model
 
         def fit(self, data: pandas.DataFrame, **kwargs) -> cls:
             if self._is_fitted():
@@ -60,8 +53,6 @@ class StanModelMeta(ABCMeta):
 
             return self
 
-        cls.fit = fit
-
         def to_file(self, file_path: str) -> None:
             self._check_fit()
 
@@ -71,8 +62,6 @@ class StanModelMeta(ABCMeta):
                     for parameter in parameters
                 }
             ).to_csv(file_path, index=False)
-
-        cls.to_file = to_file
 
         @classmethod
         def from_file(cls, file_path: str) -> cls:
@@ -85,6 +74,14 @@ class StanModelMeta(ABCMeta):
                 }
             )
 
+        cls._stan_model = None
+
+        cls.fit = fit
+        cls.to_file = to_file
         cls.from_file = from_file
+        cls._is_fitted = _is_fitted
+        cls._compile_stan_model = _compile_stan_model
 
         cls.__abstractmethods__ -= {'fit', '_is_fitted'}
+
+        cls = dataclass(cls)
