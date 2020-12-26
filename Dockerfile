@@ -10,4 +10,7 @@ ADD requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Install ipykernel and configure jupyter
-RUN python3 -m ipykernel install --user && mkdir -p /root/.jupyter && echo "{\"NotebookApp\": {\"token\": \"\"}}" > /root/.jupyter/jupyter_notebook_config.json
+RUN python3 -m ipykernel install --user \
+    && mkdir -p /root/.jupyter \
+    && echo '{"NotebookApp": {"token": ""}}' > /root/.jupyter/jupyter_notebook_config.json
+
