@@ -50,6 +50,9 @@ class CLVModel:
         if not self._is_fitted():
             raise ValueError('Model must be fitted.')
 
+        if not 0 <= discount_rate < 1:
+            raise ValueError('Discount rate must be in [0,1).')
+
         transactions = self.transactions_model.predict(data, periods)
         values = self.value_model.predict(data)
 
