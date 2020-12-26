@@ -6,11 +6,11 @@ import pandas
 from clv_model.clv_model.transactions_model.transactions_model \
     import TransactionsModel
 
-__all__ = ('LocalMeanTransactionRateModel',)
+__all__ = ('LocalTransactionRateModel',)
 
 
 @dataclass
-class LocalMeanTransactionRateModel(TransactionsModel):
+class LocalTransactionRateModel(TransactionsModel):
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
         return self
 

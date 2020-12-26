@@ -7,11 +7,11 @@ import pandas
 from clv_model.clv_model.transactions_model.transactions_model \
     import TransactionsModel
 
-__all__ = ('GlobalMeanTransactionRateModel',)
+__all__ = ('GlobalTransactionRateModel',)
 
 
 @dataclass
-class GlobalMeanTransactionRateModel(TransactionsModel):
+class GlobalTransactionRateModel(TransactionsModel):
     mean_transaction_rate: Optional[float] = None
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
