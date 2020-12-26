@@ -5,7 +5,7 @@ services:
     build:
       context: .
     volumes:
-      - .:/app/
+      - ..:/app/
     ports:
       - '8888:8888'
     command: 'jupyter notebook --port 8888 --no-browser --notebook-dir=/app --ip 0.0.0.0 --allow-root'
