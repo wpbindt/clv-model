@@ -7,7 +7,7 @@ import numpy
 import pandas
 import pystan
 
-from clv_based_bidder.clv_model.value_model.value_model import ValueModel
+from clv_model.clv_model.value_model.value_model import ValueModel
 
 __all__ = ('GammaGammaModel',)
 
@@ -89,7 +89,7 @@ class GammaGammaModel(ValueModel):
 
     def _compile_stan_model(self) -> pystan.StanModel:
         with resources.open_text(
-            'clv_based_bidder.stan_models',
+            'clv_model.stan_models',
             'gamma_gamma.stan'
         ) as model_file:
             self._stan_model = pystan.StanModel(model_file)
