@@ -10,7 +10,7 @@ __all__ = ('TransactionsModel',)
 @dataclass
 class TransactionsModel(ABC):
     @abstractmethod
-    def fit(self, data: pandas.DataFrame) -> TransactionsModel:
+    def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
         ...
 
     @abstractmethod

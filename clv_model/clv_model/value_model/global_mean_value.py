@@ -13,7 +13,7 @@ class GlobalMeanValue(ValueModel):
     def __post_init__(self):
         self.global_mean: typing.Optional[float] = None
 
-    def fit(self, data: pandas.DataFrame) -> ValueModel:
+    def fit(self, data: pandas.DataFrame, **kwargs) -> ValueModel:
         total_transactions = data.frequency.sum()
         self.global_mean = (
             data

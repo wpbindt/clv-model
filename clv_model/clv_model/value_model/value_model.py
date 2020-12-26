@@ -8,7 +8,7 @@ import pandas
 @dataclass
 class ValueModel(ABC):
     @abstractmethod
-    def fit(self, data: pandas.DataFrame) -> ValueModel:
+    def fit(self, data: pandas.DataFrame, **kwargs) -> ValueModel:
         ...
 
     @abstractmethod

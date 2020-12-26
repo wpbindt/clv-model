@@ -8,7 +8,7 @@ __all__ = ('LocalMeanValue',)
 
 @dataclass
 class LocalMeanValue(ValueModel):
-    def fit(self, data: pandas.DataFrame) -> ValueModel:
+    def fit(self, data: pandas.DataFrame, **kwargs) -> ValueModel:
         return self
 
     def _is_fitted(self) -> bool:

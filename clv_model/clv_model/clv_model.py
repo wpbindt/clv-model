@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 import pandas
 
@@ -14,16 +15,27 @@ class CLVModel:
     value_model: ValueModel
     transactions_model: TransactionsModel
 
-    def fit(self, data: pandas.DataFrame) -> CLVModel:
-        self.value_model.fit(data)
-        self.transactions_model.fit(data)
+    def fit(
+        self,
+        data: pandas.DataFrame,
+        value_model_kwargs: Optional[Dict[str, Any]] = None,
+        transactions_model_kwargs: Optional[Dict[str, Any]] = None
+    ) -> CLVModel:
+        if not self.value_model._is_fitted():
+            if value_model_kwargs is None:
+                value_model_kwargs = {}
+
+            self.value_model.fit(data=data, **value_model_kwargs)
+
+        if not self.transactions_model._is_fitted():
+            if transactions_model_kwargs is None:
+                transactions_model_kwargs = {}
+
+            self.transactions_model.fit(data=data, **transactions_model_kwargs)
 
         return self
 
     def _is_fitted(self) -> bool:
-        if self._is_fitted():
-            return self
-
         return (
             self.value_model._is_fitted()
             and self.transactions_model._is_fitted()
