@@ -74,11 +74,22 @@ class StanModelMeta(ABCMeta):
                 }
             )
 
+        def posterior_mean(self) -> cls:
+            self._check_fit()
+
+            return cls(
+                **{
+                    parameter: getattr(self, parameter).mean(keepdims=True)
+                    for parameter in parameters
+                }
+            )
+
         cls._stan_model = None
 
         cls.fit = fit
         cls.to_file = to_file
         cls.from_file = from_file
+        cls.posterior_mean = posterior_mean
         cls._is_fitted = _is_fitted
         cls._compile_stan_model = _compile_stan_model
 
