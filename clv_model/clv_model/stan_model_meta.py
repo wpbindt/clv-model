@@ -25,7 +25,7 @@ class StanModelMeta(ABCMeta):
         def _compile_stan_model(self) -> pystan.StanModel:
             with resources.open_text(
                 'clv_model.stan_models',
-                model_name + '.stan'
+                f'{model_name}.stan'
             ) as model_file:
                 self._stan_model = pystan.StanModel(model_file)
 

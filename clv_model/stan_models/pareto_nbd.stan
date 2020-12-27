@@ -13,11 +13,11 @@ parameters {
   vector<lower=0>[N] lambda; // per-customer transaction rate
   vector<lower=0>[N] mu; // per-customer churn rate
 
-  // shape and rate parameters underlying lambda
+  // shape and rate underlying lambda
   real<lower=0> lambda_shape;
   real<lower=0> lambda_rate;
 
-  // shape and rate parameters underlying mu
+  // shape and rate underlying mu
   real<lower=0> mu_shape;
   real<lower=0> mu_rate;
 }
