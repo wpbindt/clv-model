@@ -112,3 +112,24 @@ class ParetoNBDModel(TransactionsModel, metaclass=StanModelMeta):
                 + self.mu_shape * a_0 / denom_exponent
             )
         )
+
+    def probability_alive(
+        self,
+        frequency: numpy,
+        recency: numpy.ndarray,
+        observation_period: numpy.ndarray,
+    ) -> pandas.DataFrame:
+        likelihoods = self._likelihoods(frequency, recency, observation_period)
+        shape_frequency = self.lambda_shape + frequency
+
+        return (
+            gamma(shape_frequency)
+            * (self.lambda_rate ** self.lambda_shape)
+            * (self.mu_rate ** self.mu_shape)
+            / (
+                gamma(self.lambda_shape)
+                * (self.lambda_rate + observation_period) ** shape_frequency
+                * (self.mu_rate + observation_period) ** self.mu_shape
+                * likelihoods
+            )
+        )
