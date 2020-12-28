@@ -24,13 +24,13 @@ parameters {
 }
 
 model {
-    // cache calculations
-    vector[N] non_churn_prob = 1 - p;
+  // cache calculations
+  vector[N] non_churn_prob = 1 - p;
 
-    p ~ beta(alpha, beta)
-    lambda ~ gamma(lambda_shape, lambda_rate)
+  p ~ beta(alpha, beta);
+  lambda ~ gamma(lambda_shape, lambda_rate);
 
-    // increase log likelihood
-    target += frequency .* log(lambda) + (frequency - 1) *. log(non_churn_prob)
-    target += log(non_churn_prob .* exp(- lambda .* T) + p .* exp(- lambda .* recency))
+  // increase log likelihood
+  target += frequency .* log(lambda) + (frequency - 1) .* log(non_churn_prob);
+  target += log(non_churn_prob .* exp(- lambda .* T) + p .* exp(- lambda .* recency));
 }
