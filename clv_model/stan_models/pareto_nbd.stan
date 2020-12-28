@@ -29,7 +29,7 @@ model {
   lambda ~ gamma(lambda_shape, lambda_rate);
   mu ~ gamma(mu_shape, mu_rate);
 
-  // increment log likelihood
+  // increase log likelihood
   target += frequency .* log(lambda) - log(lambda_plus_mu);
   target += log(mu .* exp(-lambda_plus_mu .* recency) + lambda .* exp(-lambda_plus_mu .* T));
 }
