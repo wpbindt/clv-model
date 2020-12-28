@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from importlib import resources
 from typing import Optional, Set
 
-import numpy
 import pandas
 import pystan
 
@@ -19,11 +18,7 @@ class StanModelBase:
 
     @classmethod
     def _get_parameters(cls) -> Set[str]:
-        return {
-            parameter
-            for parameter, type_ in cls.__annotations__.items()
-            if type_ == Optional[numpy.ndarray]
-        }
+        return set(cls.__annotations__)
 
     def _is_fitted(self) -> bool:
         return all(
