@@ -1,9 +1,11 @@
 from importlib import resources
 import os.path
 import pickle
+import sys
 
 from pystan import StanModel
 
+sys.path.append('/app')
 STAN_MODELS_PACKAGE = 'clv_model.stan_models'
 
 
@@ -27,7 +29,7 @@ def is_compiled(model_filename: str):
 def pickle_model(model_filename: str, stan_model: StanModel) -> None:
     with resources.path(STAN_MODELS_PACKAGE, model_filename) as path:
         pickle_path = path.with_suffix('.pkl')
-    with open(pickle_path, 'w') as pickle_file:
+    with open(pickle_path, 'wb') as pickle_file:
         pickle.dump(stan_model, pickle_file)
 
 
