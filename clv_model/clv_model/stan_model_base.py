@@ -55,7 +55,10 @@ class StanModelBase:
             STAN_MODELS_PACKAGE,
             f'{cls.__model_name__}.stan'
         ) as model_file:
-            cls._stan_model = pystan.StanModel(model_file)
+            cls._stan_model = pystan.StanModel(
+                model_file,
+                model_name=cls.__model_name__
+            )
 
         return cls._stan_model
 
