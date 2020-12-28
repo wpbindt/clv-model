@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from importlib import resources
+import pickle
 from typing import Optional, TypeVar
 
 import numpy
@@ -14,10 +15,14 @@ __all__ = (
 
 Parameter = TypeVar('Parameter')
 
+STAN_MODELS_PACKAGE = 'clv_model.stan_models'
+
 
 class StanModelBase:
     def __init_subclass__(cls, model_name: str, **kwargs) -> None:
-        cls._stan_model: Optional[pystan.StanModel] = None
+        cls._stan_model: Optional[pystan.StanModel] = _load_stan_model(
+            model_name
+        )
         cls.__model_name__: str = model_name
         cls.__parameters__ = {
             name
@@ -47,7 +52,7 @@ class StanModelBase:
             return cls._stan_model
 
         with resources.open_text(
-            'clv_model.stan_models',
+            STAN_MODELS_PACKAGE,
             f'{cls.__model_name__}.stan'
         ) as model_file:
             cls._stan_model = pystan.StanModel(model_file)
@@ -106,3 +111,16 @@ class StanModelBase:
                 for parameter in self.__class__.__parameters__
             }
         )
+
+
+def _load_stan_model(model_name: str) -> Optional[pystan.StanModel]:
+    try:
+        with resources.open_binary(
+            STAN_MODELS_PACKAGE,
+            f'{model_name}.pkl'
+        ) as model_file:
+            model = pickle.load(model_file)
+    except FileNotFoundError:
+        model = None
+
+    return model
