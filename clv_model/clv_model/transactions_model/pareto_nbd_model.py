@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import numpy
 import pandas
 from scipy.special import gamma, hyp2f1
