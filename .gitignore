@@ -1,3 +1,6 @@
+# Ignore pkl files, for safety
+*.pkl
+
 # Ignore everything in data folders
 data/
 
