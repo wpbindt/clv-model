@@ -33,26 +33,41 @@ class ParetoNBDModel(
         recency = data.recency.values.reshape(-1, 1)
         observation_period = data['T'].values.reshape(-1, 1)
 
-        likes = self._likelihoods(
-            frequency, recency, observation_period
+        probalive = self.probability_alive(
+            frequency=frequency,
+            recency=recency,
+            observation_period=observation_period
         )
 
-        # posterior mean of
-        # E(transactions periods | frequency, recency, T)
-        expected_value = (
-            ... # TODO
+        # posterior mean of expected purchases after observation
+        # period ends
+        breakpoint()
+        purchases_after_observation = (
+            probalive
+            * (self.lambda_shape + frequency)
+            * (self.mu_rate + observation_period)
+            / ((self.lambda_rate + observation_period) * (self.mu_shape - 1))
+            * (
+                1 - (
+                    (self.mu_rate + observation_period)
+                    / (self.mu_rate + observation_period + periods)
+                ) ** (self.mu_shape - 1)
+            )
         ).mean(1)
 
-        return pandas.DataFrame(
-            data={
-                'id': data.customer_id,
-                'transactions': expected_value
-            }
+        return (
+            data
+            .rename(columns={'customer_id': 'id'})
+            .assign(
+                transactions=lambda df:
+                df.frequency + purchases_after_observation
+            )
+            [['id', 'transactions']]
         )
 
     def _likelihoods(
         self,
-        frequency: numpy,
+        frequency: numpy.ndarray,
         recency: numpy.ndarray,
         observation_period: numpy.ndarray
     ) -> numpy.ndarray:
@@ -120,7 +135,9 @@ class ParetoNBDModel(
         frequency: numpy,
         recency: numpy.ndarray,
         observation_period: numpy.ndarray,
-    ) -> pandas.DataFrame:
+    ) -> numpy.ndarray:
+        self._check_fit()
+
         likelihoods = self._likelihoods(frequency, recency, observation_period)
         shape_frequency = self.lambda_shape + frequency
 
