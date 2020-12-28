@@ -5,16 +5,18 @@ import numpy
 import pandas
 from scipy.special import gamma, hyp2f1
 
-from clv_model.clv_model.stan_model_meta import StanModelMeta
+from clv_model.clv_model.stan_model_base import StanModelBase
 from clv_model.clv_model.transactions_model.transactions_model \
     import TransactionsModel
 
 __all__ = ('ParetoNBDModel',)
 
 
-class ParetoNBDModel(TransactionsModel, metaclass=StanModelMeta):
-    __model_name__ = 'pareto_nbd'
-
+class ParetoNBDModel(
+    StanModelBase,
+    TransactionsModel,
+    model_name='pareto_nbd'
+):
     lambda_shape: typing.Optional[numpy.ndarray] = None
     lambda_rate: typing.Optional[numpy.ndarray] = None
     mu_shape: typing.Optional[numpy.ndarray] = None
