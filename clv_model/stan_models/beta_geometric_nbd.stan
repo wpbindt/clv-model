@@ -31,6 +31,6 @@ model {
   lambda ~ gamma(lambda_shape, lambda_rate);
 
   // increase log likelihood
-  target += frequency .* log(lambda) + (frequency - 1) *. log(non_churn_prob);
+  target += frequency .* log(lambda) + (frequency - 1) .* log(non_churn_prob);
   target += log(non_churn_prob .* exp(- lambda .* T) + p .* exp(- lambda .* recency));
 }
