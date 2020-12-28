@@ -1,29 +1,44 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from importlib import resources
-from typing import Optional, Set
+from typing import Optional, TypeVar
 
+import numpy
 import pandas
 import pystan
 
-__all__ = ('StanModelBase',)
+__all__ = (
+    'Parameter',
+    'StanModelBase',
+)
+
+Parameter = TypeVar('Parameter')
 
 
 class StanModelBase:
     def __init_subclass__(cls, model_name: str, **kwargs) -> None:
         cls._stan_model: Optional[pystan.StanModel] = None
         cls.__model_name__: str = model_name
+        cls.__parameters__ = {
+            name
+            for name, type_ in cls.__annotations__.items()
+            if type_ == Parameter
+        }
+        cls.__annotations__.update(
+            {
+                parameter: Optional[numpy.ndarray]
+                for parameter in cls.__parameters__
+            }
+        )
+        for parameter in cls.__parameters__:
+            setattr(cls, parameter, None)
         cls = dataclass(cls)
         super().__init_subclass__(**kwargs)
-
-    @classmethod
-    def _get_parameters(cls) -> Set[str]:
-        return set(cls.__annotations__)
 
     def _is_fitted(self) -> bool:
         return all(
             getattr(self, parameter) is not None
-            for parameter in self._get_parameters()
+            for parameter in self.__class__.__parameters__
         )
 
     @classmethod
@@ -56,7 +71,7 @@ class StanModelBase:
         )
 
         posteriors = fit.extract(permuted=True)
-        for parameter in self._get_parameters():
+        for parameter in self.__class__.__parameters__:
             setattr(self, parameter, posteriors[parameter])
 
         return self
@@ -67,7 +82,7 @@ class StanModelBase:
         pandas.DataFrame(
             data={
                 parameter: getattr(self, parameter)
-                for parameter in self._get_parameters()
+                for parameter in self.__class__.__parameters__
             }
         ).to_csv(file_path, index=False)
 
@@ -78,7 +93,7 @@ class StanModelBase:
         return cls(
             **{
                 parameter: parameters_df[parameter].values
-                for parameter in cls._get_parameters()
+                for parameter in cls.__class__.__parameters__
             }
         )
 
@@ -88,6 +103,6 @@ class StanModelBase:
         return self.__class__(
             **{
                 parameter: getattr(self, parameter).mean(keepdims=True)
-                for parameter in self._get_parameters()
+                for parameter in self.__class__.__parameters__
             }
         )

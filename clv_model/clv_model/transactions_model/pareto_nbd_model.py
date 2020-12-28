@@ -1,11 +1,10 @@
 from __future__ import annotations
-import typing
 
 import numpy
 import pandas
 from scipy.special import gamma, hyp2f1
 
-from clv_model.clv_model.stan_model_base import StanModelBase
+from clv_model.clv_model.stan_model_base import Parameter, StanModelBase
 from clv_model.clv_model.transactions_model.transactions_model \
     import TransactionsModel
 
@@ -17,10 +16,10 @@ class ParetoNBDModel(
     TransactionsModel,
     model_name='pareto_nbd'
 ):
-    lambda_shape: typing.Optional[numpy.ndarray] = None
-    lambda_rate: typing.Optional[numpy.ndarray] = None
-    mu_shape: typing.Optional[numpy.ndarray] = None
-    mu_rate: typing.Optional[numpy.ndarray] = None
+    lambda_shape: Parameter
+    lambda_rate: Parameter
+    mu_shape: Parameter
+    mu_rate: Parameter
 
     def predict(
         self,

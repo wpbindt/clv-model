@@ -1,18 +1,15 @@
-from typing import Optional
-
-import numpy
 import pandas
 
-from clv_model.clv_model.stan_model_base import StanModelBase
+from clv_model.clv_model.stan_model_base import Parameter, StanModelBase
 from clv_model.clv_model.value_model.value_model import ValueModel
 
 __all__ = ('GammaGammaModel',)
 
 
 class GammaGammaModel(StanModelBase, ValueModel, model_name='gamma_gamma'):
-    p: Optional[numpy.ndarray] = None
-    q: Optional[numpy.ndarray] = None
-    mu: Optional[numpy.ndarray] = None
+    p: Parameter
+    q: Parameter
+    mu: Parameter
 
     def predict(self, data: pandas.DataFrame) -> pandas.DataFrame:
         self._check_fit()
