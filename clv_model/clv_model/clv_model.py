@@ -65,10 +65,14 @@ class CLVModel:
         if discount_rate == 0:
             return non_discounted_clv[['id', 'clv']]
 
-        return self._compute_discounted_clv(non_discounted_clv)
+        return CLVModel._compute_discounted_clv(
+            non_discounted_clv=non_discounted_clv,
+            periods=periods,
+            discount_rate=discount_rate
+        )
 
+    @staticmethod
     def _compute_discounted_clv(
-        self,
         non_discounted_clv: pandas.DataFrame,
         periods: int,
         discount_rate: float
