@@ -21,13 +21,13 @@ class CLVModel:
         value_model_kwargs: Optional[Dict[str, Any]] = None,
         transactions_model_kwargs: Optional[Dict[str, Any]] = None
     ) -> CLVModel:
-        if not self.value_model._is_fitted():
+        if not self.value_model.is_fitted():
             if value_model_kwargs is None:
                 value_model_kwargs = {}
 
             self.value_model.fit(data=data, **value_model_kwargs)
 
-        if not self.transactions_model._is_fitted():
+        if not self.transactions_model.is_fitted():
             if transactions_model_kwargs is None:
                 transactions_model_kwargs = {}
 
@@ -35,10 +35,10 @@ class CLVModel:
 
         return self
 
-    def _is_fitted(self) -> bool:
+    def is_fitted(self) -> bool:
         return (
-            self.value_model._is_fitted()
-            and self.transactions_model._is_fitted()
+            self.value_model.is_fitted()
+            and self.transactions_model.is_fitted()
         )
 
     def predict(
@@ -47,7 +47,7 @@ class CLVModel:
         periods: int,
         discount_rate: float
     ) -> pandas.DataFrame:
-        if not self._is_fitted():
+        if not self.is_fitted():
             raise ValueError('Model must be fitted.')
 
         if not 0 <= discount_rate < 1:

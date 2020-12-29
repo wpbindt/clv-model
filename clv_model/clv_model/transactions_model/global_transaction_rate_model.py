@@ -15,12 +15,12 @@ class GlobalTransactionRateModel(TransactionsModel):
     mean_transaction_rate: Optional[float] = None
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
-        if not self._is_fitted():
+        if not self.is_fitted():
             self.mean_transaction_rate = (data.frequency / data['T']).mean()
 
         return self
 
-    def _is_fitted(self) -> bool:
+    def is_fitted(self) -> bool:
         return self.mean_transaction_rate is not None
 
     def predict(

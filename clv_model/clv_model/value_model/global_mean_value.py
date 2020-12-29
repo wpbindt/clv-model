@@ -24,7 +24,7 @@ class GlobalMeanValue(ValueModel):
         )
         return self
 
-    def _is_fitted(self) -> bool:
+    def is_fitted(self) -> bool:
         return self.global_mean is not None
 
     def predict(self, data: pandas.DataFrame) -> pandas.DataFrame:

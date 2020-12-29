@@ -40,7 +40,7 @@ class StanModelBase:
         cls = dataclass(cls)
         super().__init_subclass__(**kwargs)
 
-    def _is_fitted(self) -> bool:
+    def is_fitted(self) -> bool:
         return all(
             getattr(self, parameter) is not None
             for parameter in self.__class__.__parameters__
@@ -63,7 +63,7 @@ class StanModelBase:
         return cls._stan_model
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> StanModelBase:
-        if self._is_fitted():
+        if self.is_fitted():
             return self
 
         if self._stan_model is None:

@@ -14,7 +14,7 @@ class LocalTransactionRateModel(TransactionsModel):
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
         return self
 
-    def _is_fitted(self) -> bool:
+    def is_fitted(self) -> bool:
         return True
 
     def predict(

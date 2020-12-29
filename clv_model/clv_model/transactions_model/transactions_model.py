@@ -14,7 +14,7 @@ class TransactionsModel(ABC):
         ...
 
     @abstractmethod
-    def _is_fitted(self) -> bool:
+    def is_fitted(self) -> bool:
         ...
 
     @abstractmethod
@@ -26,5 +26,5 @@ class TransactionsModel(ABC):
         ...
 
     def _check_fit(self) -> None:
-        if not self._is_fitted():
+        if not self.is_fitted():
             raise ValueError('Model is not fit.')
