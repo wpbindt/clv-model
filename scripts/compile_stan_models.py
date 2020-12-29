@@ -21,9 +21,8 @@ def compile_stan_model(model_filename: str) -> StanModel:
 
 
 def is_compiled(model_filename: str):
-    with resources.path(STAN_MODELS_PACKAGE, file_) as model_path:
-        compiled = model_path.with_suffix('.pkl').is_file()
-    return compiled
+    with resources.path(STAN_MODELS_PACKAGE, model_filename) as model_path:
+        return model_path.with_suffix('.pkl').is_file()
 
 
 def pickle_model(model_filename: str, stan_model: StanModel) -> None:
