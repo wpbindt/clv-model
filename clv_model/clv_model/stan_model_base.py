@@ -63,9 +63,6 @@ class StanModelBase:
         return cls._stan_model
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> StanModelBase:
-        if self.is_fitted():
-            return self
-
         if self._stan_model is None:
             self._compile_stan_model()
 
@@ -101,7 +98,7 @@ class StanModelBase:
         return cls(
             **{
                 parameter: parameters_df[parameter].values
-                for parameter in cls.__class__.__parameters__
+                for parameter in cls.__parameters__
             }
         )
 
