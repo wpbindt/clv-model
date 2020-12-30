@@ -38,7 +38,6 @@ class ParetoNBDModel(
 
         # posterior mean of expected purchases after observation
         # period ends
-        breakpoint()
         purchases_after_observation = (
             probalive
             * (self.lambda_shape + frequency)
