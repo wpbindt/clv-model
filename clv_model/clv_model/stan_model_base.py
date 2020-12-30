@@ -92,14 +92,15 @@ class StanModelBase:
         ).to_csv(file_path, index=False)
 
     @classmethod
-    def from_file(cls, file_path: str) -> StanModelBase:
+    def from_file(cls, file_path: str, **kwargs) -> StanModelBase:
         parameters_df = pandas.read_csv(file_path)
 
         return cls(
             **{
                 parameter: parameters_df[parameter].values
                 for parameter in cls.__parameters__
-            }
+            },
+            **kwargs
         )
 
     def posterior_mean(self) -> StanModelBase:
