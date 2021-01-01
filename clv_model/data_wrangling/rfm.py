@@ -63,6 +63,8 @@ def rfm(
         .pipe(_group_by_period, period=period)
     )
 
+    observation_period_end = observation_period_end.to_period(period)
+
     rf = _determine_recency_frequency(
         transactions=transactions_by_period,
         observation_period_end=observation_period_end,
@@ -114,14 +116,10 @@ def _determine_recency_frequency(
         .agg(['min', 'max', 'count'])
         .reset_index()
         .assign(
-            T=lambda df: _timedelta_to_int(
-                observation_period_end - df['min'],
-                period
-            ),
-            recency=lambda df: _timedelta_to_int(
-                observation_period_end - df['max'],
-                period
-            ),
+            T=lambda df:
+            (observation_period_end - df['min']).apply(lambda x: x.n),
+            recency=lambda df:
+            (observation_period_end - df['max']).apply(lambda x: x.n),
             frequency=lambda df: df['count'] - 1
         )
         [['customer_id', 'recency', 'frequency', 'T']]
@@ -148,7 +146,6 @@ def _group_by_period(
         )
         .groupby(['customer_id', 'date'], sort=False, as_index=False)
         .sum()
-        .assign(date=lambda df: df.date.dt.to_timestamp())
     )
 
 

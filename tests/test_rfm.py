@@ -55,3 +55,34 @@ class TestDataWrangling(unittest.TestCase):
             }
         )
         assert_frame_equal(actual, expected, check_dtype=False)
+
+        transactions = pandas.DataFrame(
+            data={
+                'customer_id': [0, 0, 0, 1, 1],
+                'date': [
+                    date(2020, 1, 1),
+                    date(2020, 1, 4),
+                    date(2020, 1, 15),
+                    date(2020, 1, 2),
+                    date(2020, 1, 6),
+                ],
+                'invoice': [10, 10, 20, 0, 5]
+            }
+        )
+        actual = rfm(
+            transactions=transactions,
+            customer_id_col='customer_id',
+            date_col='date',
+            period='W'
+        )
+        expected = pandas.DataFrame(
+            data={
+                'customer_id': [0, 1],
+                'recency': [0, 1],
+                'frequency': [1, 1],
+                'T': [2, 2]
+            }
+        )
+
+        assert_frame_equal(actual.drop('recency', axis=1),
+                           expected.drop('recency', axis=1), check_dtype=False)
