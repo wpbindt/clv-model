@@ -27,7 +27,7 @@ def pickle_model(model_filename: str, stan_model_: StanModel) -> None:
     with resources.path(STAN_MODELS_PACKAGE, model_filename) as path:
         pickle_path = path.with_suffix('.pkl')
     with open(pickle_path, 'wb') as pickle_file:
-        pickle.dump(stan_model_, pickle_file)
+        pickle.dump(stan_model_, pickle_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == '__main__':
