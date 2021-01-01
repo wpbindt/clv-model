@@ -1,11 +1,12 @@
-DOCKER_DIR := docker
+DOCKER_COMPOSE := docker-compose -f './docker/docker-compose.yml' 
+CLI := $(DOCKER_COMPOSE) run --rm cli
 clean :
 	rm clv_model/stan_models/*.pkl
 start-jupyter :
-	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' up -d jupyter
+	$(DOCKER_COMPOSE) up -d jupyter
 stop-jupyter :
-	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' stop jupyter
+	$(DOCKER_COMPOSE) stop jupyter
 compile-stan-models :
-	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' run --rm cli python3 scripts/compile_stan_models.py
+	$(CLI) python3 scripts/compile_stan_models.py
 run-tests :
-	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' run --rm cli python3 -m unittest discover tests || true
+	$(CLI) python3 -m unittest discover tests || true
