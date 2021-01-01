@@ -7,3 +7,5 @@ stop-jupyter :
 	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' stop jupyter
 compile-stan-models :
 	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' run --rm cli python3 scripts/compile_stan_models.py
+run-tests :
+	docker-compose -f '${DOCKER_DIR}/docker-compose.yml' run --rm cli python3 -m unittest discover tests || true
