@@ -67,8 +67,7 @@ def rfm(
 
     rf = _determine_recency_frequency(
         transactions=transactions_by_period,
-        observation_period_end=observation_period_end,
-        period=period
+        observation_period_end=observation_period_end
     )
 
     if value_col is None:
@@ -101,8 +100,7 @@ def _determine_monetary_value(
 
 def _determine_recency_frequency(
     transactions: pandas.DataFrame,
-    observation_period_end: typing.Any,
-    period: str,
+    observation_period_end: typing.Any
 ) -> pandas.DataFrame:
     _check_column_presence(
         wanted={'date', 'customer_id'},
