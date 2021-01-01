@@ -37,9 +37,11 @@ def rfm(
     of the component transactions.
     """
     if value_col is not None:
-        assert value_col in transactions.columns
+        wanted_columns = {date_col, customer_id_col, value_col}
+    else:
+        wanted_columns = {date_col, customer_id_col}
     _check_column_presence(
-        wanted={date_col, customer_id_col},
+        wanted=wanted_columns,
         present=set(transactions.columns)
     )
 
@@ -174,4 +176,5 @@ def _check_column_presence(
     present: typing.Set[str]
 ) -> None:
     for column in wanted:
-        assert column in present
+        if column not in present:
+            raise ValueError(f'Column "{column}" not found in dataset.')
