@@ -102,6 +102,9 @@ def _determine_monetary_value(
             [['value', 'customer_id']]
             .groupby('customer_id', as_index=False, sort=False)
             .mean()
+            .assign(
+                value=lambda df: df.value.round(2)
+            )
         )
 
     return (
@@ -109,6 +112,9 @@ def _determine_monetary_value(
         [['value', 'customer_id']]
         .groupby('customer_id', as_index=False, sort=False)
         .mean()
+        .assign(
+            value=lambda df: df.value.round(2)
+        )
     )
 
 
