@@ -28,7 +28,8 @@ class TestDataWrangling(unittest.TestCase):
             transactions=transactions,
             customer_id_col='id',
             date_col='order_date',
-            value_col='invoice'
+            value_col='invoice',
+            drop_first_transaction=True
         )
         expected = pandas.DataFrame(
             data={
@@ -73,16 +74,17 @@ class TestDataWrangling(unittest.TestCase):
             transactions=transactions,
             customer_id_col='customer_id',
             date_col='date',
-            period='W'
+            period='W',
+            value_col='invoice'
         )
         expected = pandas.DataFrame(
             data={
                 'customer_id': [0, 1],
                 'recency': [0, 1],
                 'frequency': [1, 1],
-                'T': [2, 2]
+                'T': [2, 2],
+                'value': [20, 2.5]
             }
         )
 
-        assert_frame_equal(actual.drop('recency', axis=1),
-                           expected.drop('recency', axis=1), check_dtype=False)
+        assert_frame_equal(actual, expected)

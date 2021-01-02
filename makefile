@@ -1,4 +1,4 @@
-DOCKER_COMPOSE := docker-compose -f './docker/docker-compose.yml' 
+DOCKER_COMPOSE := docker-compose -f docker/docker-compose.yml
 CLI := $(DOCKER_COMPOSE) run --rm cli
 clean :
 	rm clv_model/stan_models/*.pkl
