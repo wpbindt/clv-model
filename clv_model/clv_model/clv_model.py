@@ -4,8 +4,8 @@ from typing import Any, Dict, Optional
 
 import pandas
 
-from transactions_model.transactions_model import TransactionsModel
-from value_model.value_model import ValueModel
+from .transactions_model.transactions_model import TransactionsModel
+from .value_model.value_model import ValueModel
 
 __all__ = ('CLVModel',)
 
