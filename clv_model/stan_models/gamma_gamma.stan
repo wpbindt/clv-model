@@ -12,6 +12,10 @@ parameters {
 }
 
 model {
+  mu ~ cauchy(0, 4);
+  p ~ cauchy(0, 4);
+  q ~ cauchy(0, 4);
+
   nu ~ gamma(q, mu);
   value ~ gamma(frequency * p, frequency .* nu);
 }
