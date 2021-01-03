@@ -69,7 +69,8 @@ def rfm(
 
     rf = _determine_recency_frequency(
         transactions=transactions_by_period,
-        observation_period_end=observation_period_end
+        observation_period_end=observation_period_end,
+        drop_first_transaction=drop_first_transaction
     )
 
     if value_col is None:
@@ -120,7 +121,8 @@ def _determine_monetary_value(
 
 def _determine_recency_frequency(
     transactions: pandas.DataFrame,
-    observation_period_end: typing.Any
+    observation_period_end: typing.Any,
+    drop_first_transaction: bool
 ) -> pandas.DataFrame:
     _check_column_presence(
         wanted={'date', 'customer_id'},
@@ -137,8 +139,8 @@ def _determine_recency_frequency(
             T=lambda df:
             (observation_period_end - df['min']).apply(lambda x: x.n),
             recency=lambda df:
-            (observation_period_end - df['max']).apply(lambda x: x.n),
-            frequency=lambda df: df['count'] - 1
+            (df['max'] - df['min']).apply(lambda x: x.n),
+            frequency=lambda df: df['count'] - drop_first_transaction
         )
         [['customer_id', 'recency', 'frequency', 'T']]
     )
