@@ -26,6 +26,11 @@ model {
   // cache some calculations
   vector[N] lambda_plus_mu = lambda + mu;
 
+  lambda_shape ~ exponential(1);
+  lambda_rate ~ exponential(1);
+  mu_shape ~ exponential(1);
+  mu_rate ~ exponential(1);
+
   lambda ~ gamma(lambda_shape, lambda_rate);
   mu ~ gamma(mu_shape, mu_rate);
 
