@@ -139,7 +139,7 @@ def _determine_recency_frequency(
             T=lambda df:
             (observation_period_end - df['min']).apply(lambda x: x.n),
             recency=lambda df:
-            (df['max'] - df['min']).apply(lambda x: x.n),
+            (observation_period_end - df['max']).apply(lambda x: x.n),
             frequency=lambda df: df['count'] - drop_first_transaction
         )
         [['customer_id', 'recency', 'frequency', 'T']]
