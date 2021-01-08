@@ -1,8 +1,7 @@
 import pandas
 
-from clv_model.clv_model.stan_model_base import Parameter, StanModelBase
-from clv_model.clv_model.transactions_model.transactions_model \
-    import TransactionsModel
+from ..stan_model_base import Parameter, StanModelBase
+from .transactions_model import TransactionsModel
 
 __all__ = ('BetaGeometricNBDModel',)
 

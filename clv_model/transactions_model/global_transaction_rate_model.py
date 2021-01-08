@@ -4,8 +4,7 @@ from typing import Optional
 
 import pandas
 
-from clv_model.clv_model.transactions_model.transactions_model \
-    import TransactionsModel
+from .transactions_model import TransactionsModel
 
 __all__ = ('GlobalTransactionRateModel',)
 

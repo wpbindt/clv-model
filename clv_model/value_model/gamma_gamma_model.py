@@ -1,7 +1,7 @@
 import pandas
 
-from clv_model.clv_model.stan_model_base import Parameter, StanModelBase
-from clv_model.clv_model.value_model.value_model import ValueModel
+from ..stan_model_base import Parameter, StanModelBase
+from .value_model import ValueModel
 
 __all__ = ('GammaGammaModel',)
 

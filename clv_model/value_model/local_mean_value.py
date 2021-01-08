@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from value_model import ValueModel
 
 import pandas
+
+from .value_model import ValueModel
 
 __all__ = ('LocalMeanValue',)
 

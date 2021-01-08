@@ -1,10 +1,8 @@
-from __future__ import annotations
 from dataclasses import dataclass
 
 import pandas
 
-from clv_model.clv_model.transactions_model.transactions_model \
-    import TransactionsModel
+from .transactions_model import TransactionsModel
 
 __all__ = ('LocalTransactionRateModel',)
 
