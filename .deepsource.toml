@@ -1,6 +1,6 @@
 version = 1
 
-exclude_patterns = ["**/local_mean_value.py"]
+exclude_patterns = ["**/local_mean_value.py", "**/local_transaction_rate_model.py"]
 
 [[analyzers]]
 name = "python"
