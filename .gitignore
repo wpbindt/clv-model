@@ -1,10 +1,6 @@
-# Ignore pkl files, for safety
 *.pkl
-
-# Ignore everything in data folders
+*.csv
 data/
-
-# Ignore all ipython notebooks
 *.ipynb
 
 # Byte-compiled / optimized / DLL files
