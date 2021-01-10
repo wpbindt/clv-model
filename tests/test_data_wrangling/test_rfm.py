@@ -11,7 +11,7 @@ class TestDataWrangling(unittest.TestCase):
     def test_rfm(self) -> None:
         transactions = pandas.DataFrame(
             data={
-                'id': [0, 0, 0, 1, 1, 2],
+                'customer_id': [0, 0, 0, 1, 1, 2],
                 'order_date': [
                     date(2020, 1, 1),
                     date(2020, 1, 4),
@@ -26,13 +26,13 @@ class TestDataWrangling(unittest.TestCase):
 
         actual = rfm(
             transactions=transactions,
-            customer_id_col='id',
+            customer_id_col='customer_id',
             date_col='order_date',
             value_col='invoice',
         )
         expected = pandas.DataFrame(
             data={
-                'customer_id': [0, 1, 2],
+                'id': [0, 1, 2],
                 'recency': [1, 0, 3],
                 'frequency': [3, 2, 1],
                 'T': [5, 4, 3],
@@ -43,12 +43,12 @@ class TestDataWrangling(unittest.TestCase):
 
         actual = rfm(
             transactions=transactions,
-            customer_id_col='id',
+            customer_id_col='customer_id',
             date_col='order_date',
         )
         expected = pandas.DataFrame(
             data={
-                'customer_id': [0, 1, 2],
+                'id': [0, 1, 2],
                 'recency': [1, 0, 3],
                 'frequency': [3, 2, 1],
                 'T': [5, 4, 3],
@@ -78,7 +78,7 @@ class TestDataWrangling(unittest.TestCase):
         )
         expected = pandas.DataFrame(
             data={
-                'customer_id': [0, 1],
+                'id': [0, 1],
                 'recency': [0, 1],
                 'frequency': [2, 2],
                 'T': [2, 2],

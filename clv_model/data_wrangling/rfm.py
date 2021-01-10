@@ -16,9 +16,9 @@ def rfm(
 ) -> pandas.DataFrame:
     """
     Transforms transactional data of the form
-        (customer_id, order_date, <monetary_value>)
+        (id, order_date, <monetary_value>)
     to an rfm table of the form
-        (customer_id, recency, frequency, <value>, T).
+        (id, recency, frequency, <value>, T).
 
     - recency is the amount of time passed between the customer's
       final observed transaction up to the end of the observation
@@ -32,7 +32,7 @@ def rfm(
 
     Here, time is measured in units specified by period, which defaults
     to day. Multiple transactions occurring in the same period will be
-    counted as a single transaction whose value is the sum of the values
+    counted as a single transaction whose value is the mean of the values
     of the component transactions.
     """
     if value_col is not None:
@@ -53,7 +53,7 @@ def rfm(
         transactions
         .rename(
             columns={
-                customer_id_col: 'customer_id',
+                customer_id_col: 'id',
                 date_col: 'date',
                 value_col: 'value',
             }
@@ -75,7 +75,7 @@ def rfm(
     m = _determine_monetary_value(transactions_by_period)
     return (
         rf
-        .merge(right=m, on='customer_id', how='left')
+        .merge(right=m, on='id', how='left')
         .fillna(0)
     )
 
@@ -84,14 +84,14 @@ def _determine_monetary_value(
     transactions: pandas.DataFrame,
 ) -> pandas.DataFrame:
     _check_column_presence(
-        wanted={'value', 'customer_id'},
+        wanted={'value', 'id'},
         present=set(transactions.columns)
     )
 
     return (
         transactions
-        [['value', 'customer_id']]
-        .groupby('customer_id', as_index=False, sort=False)
+        [['value', 'id']]
+        .groupby('id', as_index=False, sort=False)
         .mean()
         .assign(
             value=lambda df: df.value.round(2)
@@ -104,13 +104,13 @@ def _determine_recency_frequency(
     observation_period_end: typing.Any,
 ) -> pandas.DataFrame:
     _check_column_presence(
-        wanted={'date', 'customer_id'},
+        wanted={'date', 'id'},
         present=set(transactions.columns)
     )
 
     return (
         transactions
-        .groupby('customer_id', sort=False)
+        .groupby('id', sort=False)
         .date
         .agg(['min', 'max', 'count'])
         .reset_index()
@@ -121,7 +121,7 @@ def _determine_recency_frequency(
             (observation_period_end - df['max']).apply(lambda x: x.n),
             frequency=lambda df: df['count']
         )
-        [['customer_id', 'recency', 'frequency', 'T']]
+        [['id', 'recency', 'frequency', 'T']]
     )
 
 
@@ -134,7 +134,7 @@ def _group_by_period(
     period: str
 ) -> pandas.DataFrame:
     _check_column_presence(
-        wanted={'date', 'customer_id'},
+        wanted={'date', 'id'},
         present=set(transactions.columns)
     )
 
@@ -143,7 +143,7 @@ def _group_by_period(
         .assign(
             date=lambda df: pandas.to_datetime(df.date).dt.to_period(period)
         )
-        .groupby(['customer_id', 'date'], sort=False, as_index=False)
+        .groupby(['id', 'date'], sort=False, as_index=False)
         .mean()
     )
 
