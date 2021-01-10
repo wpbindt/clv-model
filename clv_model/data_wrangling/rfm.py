@@ -13,7 +13,6 @@ def rfm(
     value_col: typing.Optional[str] = None,
     period: str = 'D',
     observation_period_end: typing.Optional[typing.Any] = None,
-    drop_first_transaction: bool = False
 ) -> pandas.DataFrame:
     """
     Transforms transactional data of the form
@@ -29,9 +28,7 @@ def rfm(
     - T is the amount of time passed since the customer's first
       observed transaction up to the end of the observation period
     - monetary value is the average value of the customer's observed
-      transactions. If drop_first_transaction is True, the first
-      transaction is not counted, so for a customer with exactly one
-      purchase, the value will be 0
+      transactions.
 
     Here, time is measured in units specified by period, which defaults
     to day. Multiple transactions occurring in the same period will be
@@ -70,16 +67,12 @@ def rfm(
     rf = _determine_recency_frequency(
         transactions=transactions_by_period,
         observation_period_end=observation_period_end,
-        drop_first_transaction=drop_first_transaction
     )
 
     if value_col is None:
         return rf
 
-    m = _determine_monetary_value(
-        transactions_by_period,
-        drop_first_transaction
-    )
+    m = _determine_monetary_value(transactions_by_period)
     return (
         rf
         .merge(right=m, on='customer_id', how='left')
@@ -89,24 +82,11 @@ def rfm(
 
 def _determine_monetary_value(
     transactions: pandas.DataFrame,
-    drop_first_transaction: bool
 ) -> pandas.DataFrame:
     _check_column_presence(
         wanted={'value', 'customer_id'},
         present=set(transactions.columns)
     )
-
-    if drop_first_transaction:
-        return (
-            transactions
-            .pipe(_drop_first_transaction)
-            [['value', 'customer_id']]
-            .groupby('customer_id', as_index=False, sort=False)
-            .mean()
-            .assign(
-                value=lambda df: df.value.round(2)
-            )
-        )
 
     return (
         transactions
@@ -122,7 +102,6 @@ def _determine_monetary_value(
 def _determine_recency_frequency(
     transactions: pandas.DataFrame,
     observation_period_end: typing.Any,
-    drop_first_transaction: bool
 ) -> pandas.DataFrame:
     _check_column_presence(
         wanted={'date', 'customer_id'},
@@ -140,7 +119,7 @@ def _determine_recency_frequency(
             (observation_period_end - df['min']).apply(lambda x: x.n),
             recency=lambda df:
             (observation_period_end - df['max']).apply(lambda x: x.n),
-            frequency=lambda df: df['count'] - drop_first_transaction
+            frequency=lambda df: df['count']
         )
         [['customer_id', 'recency', 'frequency', 'T']]
     )
@@ -165,26 +144,7 @@ def _group_by_period(
             date=lambda df: pandas.to_datetime(df.date).dt.to_period(period)
         )
         .groupby(['customer_id', 'date'], sort=False, as_index=False)
-        .sum()
-    )
-
-
-def _drop_first_transaction(
-    transactions: pandas.DataFrame
-) -> pandas.DataFrame:
-    _check_column_presence(
-        wanted={'date', 'customer_id'},
-        present=set(transactions.columns)
-    )
-
-    return (
-        transactions
-        .sort_values(by='date', ascending=True)
-        .assign(
-            first=lambda df: ~ df.customer_id.duplicated()
-        )
-        .query('~first')
-        .drop('first', axis=1)
+        .mean()
     )
 
 
