@@ -52,7 +52,6 @@ class ParetoNBDModel(
 
         return (
             data
-            .rename(columns={'customer_id': 'id'})
             .assign(
                 transactions=lambda df:
                 df.frequency + purchases_after_observation

@@ -10,8 +10,7 @@ __all__ = ('GlobalMeanValue',)
 
 @dataclass
 class GlobalMeanValue(ValueModel):
-    def __post_init__(self):
-        self.global_mean: typing.Optional[float] = None
+    global_mean: typing.Optional[float] = None
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> ValueModel:
         total_transactions = data.frequency.sum()
@@ -32,5 +31,5 @@ class GlobalMeanValue(ValueModel):
         return (
             data
             .assign(value=self.global_mean)
-            [['customer_id', 'value']]
+            [['id', 'value']]
         )

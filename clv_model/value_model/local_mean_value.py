@@ -16,4 +16,4 @@ class LocalMeanValue(ValueModel):
         return True
 
     def predict(self, data: pandas.DataFrame) -> pandas.DataFrame:
-        return data[['customer_id', 'value']]
+        return data[['id', 'value']]
