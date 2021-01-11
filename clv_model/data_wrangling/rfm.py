@@ -1,6 +1,5 @@
 import typing
 
-import numpy
 import pandas
 
 __all__ = ('rfm',)
@@ -123,10 +122,6 @@ def _determine_recency_frequency(
         )
         [['id', 'recency', 'frequency', 'T']]
     )
-
-
-def _timedelta_to_int(delta_series, period):
-    return delta_series / numpy.timedelta64(1, period)
 
 
 def _group_by_period(
