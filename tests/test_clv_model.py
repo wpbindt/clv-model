@@ -38,7 +38,7 @@ class TestCLVModel(unittest.TestCase):
                     4 + 1/1.15
                 ]
             }
-        )
+        ).assign(clv=lambda df: df.clv.round(2))
         assert_frame_equal(actual, expected)
 
         actual = model.predict(data=pandas.DataFrame(
