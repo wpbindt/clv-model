@@ -67,36 +67,49 @@ class CLVModel:
         if periods == 0:
             return historic_clv
 
-        transactions = self.transactions_model.predict(data, periods)
-        values = self.value_model.predict(data)
-
-        non_discounted_clv = (
-            transactions
-            .merge(values, on='id')
-            .assign(clv=lambda df: df.transactions * df.value)
-        )
-
-        if discount_rate == 0:
-            return non_discounted_clv[['id', 'clv']]
-
-        return CLVModel._compute_discounted_clv(
-            non_discounted_clv=non_discounted_clv,
+        future_clv = self._compute_future_clv(
+            data=data,
             periods=periods,
             discount_rate=discount_rate
         )
 
-    @staticmethod
-    def _compute_discounted_clv(
-        non_discounted_clv: pandas.DataFrame,
+        return (
+            pandas.concat([historic_clv, future_clv])
+            .groupby('id', as_index=False, sort=False)
+            .sum()
+            .assign(clv=lambda df: df.clv.round(2))
+        )
+
+    def _compute_future_clv(
+        self,
+        data: pandas.DataFrame,
         periods: int,
         discount_rate: float
     ) -> pandas.DataFrame:
+        transactions = self.transactions_model.predict(data, periods)
+        values = self.value_model.predict(data)
+
         alpha = 1 / (1 + discount_rate)
-        discount_factor = (1 - alpha ** periods) / (periods * (1 - alpha))
+
+        discounted_time = (
+            periods if alpha == 1
+            else ((1 - alpha**periods) / (1 - alpha))
+        )
 
         return (
-            non_discounted_clv
-            .assign(clv=lambda df: df.clv * discount_factor)
+            transactions
+            .merge(values, on='id')
+            .merge(data[['id', 'T']], on='id')
+            .assign(
+                transaction_rate=lambda df: df.transactions / periods,
+                base_discount_factor=lambda df: alpha ** df['T'],
+                clv=lambda df: (
+                    df.transaction_rate
+                    * df.value
+                    * df.base_discount_factor
+                    * discounted_time
+                )
+            )
             [['id', 'clv']]
         )
 
