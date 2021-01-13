@@ -4,9 +4,8 @@ import pandas
 from pandas.testing import assert_frame_equal
 
 from clv_model.clv_model import CLVModel
-from clv_model.transactions_model.global_transaction_rate_model \
-    import GlobalTransactionRateModel
-from clv_model.value_model.global_mean_value import GlobalMeanValue
+from clv_model.transactions_model import GlobalTransactionRateModel
+from clv_model.value_model import GlobalMeanValue
 
 
 class TestCLVModel(unittest.TestCase):

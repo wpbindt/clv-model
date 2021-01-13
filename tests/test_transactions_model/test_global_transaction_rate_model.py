@@ -3,8 +3,7 @@ import unittest
 import pandas
 from pandas.testing import assert_frame_equal
 
-from clv_model.transactions_model.global_transaction_rate_model \
-    import GlobalTransactionRateModel
+from clv_model.transactions_model import GlobalTransactionRateModel
 
 
 class TestGlobalTransactionRateModel(unittest.TestCase):

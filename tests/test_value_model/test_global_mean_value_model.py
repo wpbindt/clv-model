@@ -3,7 +3,7 @@ import unittest
 import pandas
 from pandas.testing import assert_frame_equal
 
-from clv_model.value_model.global_mean_value import GlobalMeanValue
+from clv_model.value_model import GlobalMeanValue
 
 
 class TestGlobalMeanValue(unittest.TestCase):
