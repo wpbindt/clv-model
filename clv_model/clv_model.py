@@ -110,7 +110,8 @@ class CLVModel:
             rfm_df
             .assign(
                 transaction_rate=lambda df: df.frequency / df['T'],
-                discounted_time=lambda df: (1 - alpha**df['T']) / (1 - alpha),
+                discounted_time=lambda df:
+                ((1 - alpha**df['T']) / (1 - alpha)).fillna(df['T']),
                 clv=lambda df: (
                     df.transaction_rate
                     * df.value
