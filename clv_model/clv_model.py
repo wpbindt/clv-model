@@ -60,6 +60,13 @@ class CLVModel:
         if not 0 <= discount_rate < 1:
             raise ValueError('Discount rate must be in [0,1).')
 
+        historic_clv = self._compute_historic_clv(
+            rfm_df=data,
+            discount_rate=discount_rate
+        )
+        if periods == 0:
+            return historic_clv
+
         transactions = self.transactions_model.predict(data, periods)
         values = self.value_model.predict(data)
 
@@ -90,5 +97,25 @@ class CLVModel:
         return (
             non_discounted_clv
             .assign(clv=lambda df: df.clv * discount_factor)
+            [['id', 'clv']]
+        )
+
+    @staticmethod
+    def _compute_historic_clv(
+        rfm_df: pandas.DataFrame,
+        discount_rate: float
+    ) -> pandas.DataFrame:
+        alpha = 1 / (1 + discount_rate)
+        return (
+            rfm_df
+            .assign(
+                transaction_rate=lambda df: df.frequency / df['T'],
+                discounted_time=lambda df: (1 - alpha**df['T']) / (1 - alpha),
+                clv=lambda df: (
+                    df.transaction_rate
+                    * df.value
+                    * df.discounted_time
+                ).round(2)
+            )
             [['id', 'clv']]
         )
