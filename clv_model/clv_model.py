@@ -64,9 +64,6 @@ class CLVModel:
             rfm_df=data,
             discount_rate=discount_rate
         )
-        if periods == 0:
-            return historic_clv
-
         future_clv = self._compute_future_clv(
             data=data,
             periods=periods,
