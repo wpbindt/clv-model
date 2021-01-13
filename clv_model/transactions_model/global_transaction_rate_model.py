@@ -29,19 +29,8 @@ class GlobalTransactionRateModel(TransactionsModel):
     ) -> pandas.DataFrame:
         self._check_fit()
 
-        if (data['T'] > periods).any():
-            raise ValueError(
-                'Observation period must not be greater than prediction period'
-            )
-
         return (
             data
-            .assign(
-                periods_to_predict=lambda df: periods - df['T'],
-                predicted_transactions=lambda df:
-                self.mean_transaction_rate * df.periods_to_predict,
-                transactions=lambda df:
-                df.frequency + df.predicted_transactions
-            )
+            .assign(transactions=periods * self.mean_transaction_rate)
             [['id', 'transactions']]
         )

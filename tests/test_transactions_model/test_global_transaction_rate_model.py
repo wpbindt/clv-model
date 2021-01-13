@@ -42,17 +42,11 @@ class TestGlobalTransactionRateModel(unittest.TestCase):
         expected = pandas.DataFrame(
             data={
                 'id': [0, 1],
-                'transactions': [4.5, 2]
+                'transactions': [5, 5]
             }
         )
 
-        assert_frame_equal(actual, expected)
-
-        with self.assertRaises(ValueError):
-            model.predict(
-                data=data,
-                periods=1
-            )
+        assert_frame_equal(actual, expected, check_dtype=False)
 
     def test_is_fitted(self) -> None:
         model = GlobalTransactionRateModel()
