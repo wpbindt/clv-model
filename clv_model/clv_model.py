@@ -47,6 +47,13 @@ class CLVModel:
         periods: int,
         discount_rate: float
     ) -> pandas.DataFrame:
+        """
+        Predict CLV for the interval [1, T + periods], where T is the
+        number of periods the customer has been observed for.
+        For the interval [1, T], historic values are used, and for the
+        interval (T, T + periods], value_model and transactions_model
+        are used to predict the CLV.
+        """
         if not self.is_fitted():
             raise ValueError('Model must be fitted.')
 
@@ -77,13 +84,11 @@ class CLVModel:
         periods: int,
         discount_rate: float
     ) -> pandas.DataFrame:
+        alpha = 1 / (1 + discount_rate)
+        discount_factor = (1 - alpha ** periods) / (periods * (1 - alpha))
+
         return (
             non_discounted_clv
-            .assign(
-                discount_factor=lambda df:
-                    (1 - (1 - discount_rate) ** df.transactions)
-                    / (periods * discount_rate),
-                clv=lambda df: df.clv * df.discount_factor
-            )
+            .assign(clv=lambda df: df.clv * discount_factor)
             [['id', 'clv']]
         )

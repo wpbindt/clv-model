@@ -23,6 +23,17 @@ class TransactionsModel(ABC):
         data: pandas.DataFrame,
         periods: int
     ) -> pandas.DataFrame:
+        """
+        Should predict the number of purchases the customer will make
+        over the next `periods` periods. That is, previous purchases are
+        not counted.
+        The exact shape of the dataframe `data` will be dependent on the
+        model. For RFM based models, like the Pareto-NBD model, it
+        should have columns ('id', 'recency', 'frequency', 'T'), where
+        T is the number of periods the customer has been observed for.
+        This method should then predict the number of transactions
+        occurring in the interval (T, T + periods].
+        """
         ...
 
     def _check_fit(self) -> None:
