@@ -61,7 +61,7 @@ class TestCLVModel(unittest.TestCase):
                 ]
             }
         ).assign(clv=lambda df: df.clv.round(2))
-        assert_frame_equal(actual, expected)
+        assert_frame_equal(actual, expected, check_dtype=False)
 
     def test_predict_no_future(self) -> None:
         data = self._get_df()
@@ -81,13 +81,17 @@ class TestCLVModel(unittest.TestCase):
 
     def test_predict_empty(self) -> None:
         model = self._get_model()
-        actual = model.predict(data=pandas.DataFrame(
-            columns={
-                'id',
-                'recency',
-                'frequency',
-                'T',
-                'value'
-            }
-        ))
+        actual = model.predict(
+            data=pandas.DataFrame(
+                columns={
+                    'id',
+                    'recency',
+                    'frequency',
+                    'T',
+                    'value'
+                }
+            ),
+            periods=1,
+            discount_rate=0.15
+        )
         self.assertTrue(actual.empty)
