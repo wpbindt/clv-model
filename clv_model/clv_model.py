@@ -129,7 +129,7 @@ class CLVModel:
                     df.transaction_rate
                     * df.value
                     * df.discounted_time
-                ).round(2)
+                )
             )
             [['id', 'clv']]
         )
