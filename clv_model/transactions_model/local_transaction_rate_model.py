@@ -23,7 +23,7 @@ class LocalTransactionRateModel(TransactionsModel):
         return (
             data
             .assign(
-                transactions=lambda df: (df.frequency / df.T) * periods
+                transactions=lambda df: (df.frequency / df['T']) * periods
             )
             [['id', 'transactions']]
         )
