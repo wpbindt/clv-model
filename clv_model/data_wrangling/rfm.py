@@ -23,9 +23,9 @@ def rfm(
       final observed transaction up to the end of the observation
       period
     - frequency is the number of purchases the customer made during
-      the observation period, minus 1
+      the observation period.
     - T is the amount of time passed since the customer's first
-      observed transaction up to the end of the observation period
+      observed transaction up to the end of the observation period.
     - monetary value is the average value of the customer's observed
       transactions.
 
