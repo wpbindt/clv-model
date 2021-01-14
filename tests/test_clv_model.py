@@ -180,3 +180,27 @@ class TestCLVModel(unittest.TestCase):
 
         model = self._get_model()
         self.assertTrue(model.is_fitted())
+
+    def test_fit(self) -> None:
+        model = self._get_model(global_mean=None, mean_transaction_rate=None)
+        training_data = pandas.DataFrame(
+            data={
+                'id': [0, 1],
+                'recency': [1, 1],
+                'frequency': [3, 2],
+                'T': [2, 2],
+                'value': [1, 1]
+            }
+        )
+        model.fit(data=training_data)
+        expected_mean_value = round((3 * 1 + 2 * 1) / (3 + 2), 2)
+        self.assertEqual(
+            model.value_model.global_mean,
+            expected_mean_value
+        )
+
+        expected_transaction_rate = (3 / 2 + 2 / 2) / 2
+        self.assertEqual(
+            model.transactions_model.mean_transaction_rate,
+            expected_transaction_rate
+        )
