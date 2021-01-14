@@ -117,6 +117,57 @@ class TestCLVModel(unittest.TestCase):
         )
         self.assertTrue(actual.empty)
 
+    def test_predict_unfit(self) -> None:
+        model = self._get_model(global_mean=None)
+        data = self._get_df()
+        with self.assertRaises(ValueError) as error:
+            model.predict(
+                data=data,
+                periods=1,
+                discount_rate=0.2
+            )
+        self.assertEqual(
+            str(error.exception),
+            'Model must be fitted with a call to fit before '
+            'predict can be called.'
+        )
+
+    def test_predict_bad_discount_rate(self) -> None:
+        model = self._get_model()
+        data = self._get_df()
+        with self.assertRaises(ValueError) as error:
+            model.predict(
+                data=data,
+                periods=1,
+                discount_rate=1
+            )
+        self.assertEqual(
+            str(error.exception),
+            'Discount rate must be in [0,1).'
+        )
+
+        with self.assertRaises(ValueError) as error:
+            model.predict(
+                data=data,
+                periods=1,
+                discount_rate=-1
+            )
+        self.assertEqual(
+            str(error.exception),
+            'Discount rate must be in [0,1).'
+        )
+
+        with self.assertRaises(ValueError) as error:
+            model.predict(
+                data=data,
+                periods=1,
+                discount_rate=1729.01
+            )
+        self.assertEqual(
+            str(error.exception),
+            'Discount rate must be in [0,1).'
+        )
+
     def test_is_fitted(self) -> None:
         model = self._get_model(global_mean=None, mean_transaction_rate=None)
         self.assertFalse(model.is_fitted())

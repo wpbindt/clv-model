@@ -56,7 +56,10 @@ class CLVModel:
         are used to predict the CLV.
         """
         if not self.is_fitted():
-            raise ValueError('Model must be fitted.')
+            raise ValueError(
+                'Model must be fitted with a call to fit before '
+                'predict can be called.'
+            )
 
         if not 0 <= discount_rate < 1:
             raise ValueError('Discount rate must be in [0,1).')
