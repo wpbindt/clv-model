@@ -15,13 +15,14 @@ class GlobalMeanValue(ValueModel):
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> ValueModel:
         total_transactions = data.frequency.sum()
-        self.global_mean = (
+        unrounded_global_mean = (
             data
             .assign(weighted_value=lambda df: df.value * df.frequency)
             .weighted_value
             .sum()
             / total_transactions
         )
+        self.global_mean = round(unrounded_global_mean, 2)
         return self
 
     def is_fitted(self) -> bool:

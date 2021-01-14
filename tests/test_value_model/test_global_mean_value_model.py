@@ -18,7 +18,7 @@ class TestGlobalMeanValue(unittest.TestCase):
         model = GlobalMeanValue()
         model.fit(data)
 
-        self.assertEqual(model.global_mean, 20 / 3)
+        self.assertEqual(model.global_mean, round(20 / 3, 2))
 
     def test_predict(self) -> None:
         model = GlobalMeanValue(global_mean=9)
