@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from numbers import Real
 from typing import Any, Dict, Optional
 
 import pandas
@@ -45,7 +46,7 @@ class CLVModel:
         self,
         data: pandas.DataFrame,
         periods: int,
-        discount_rate: float
+        discount_rate: Real
     ) -> pandas.DataFrame:
         """
         Predict CLV for the interval [1, T + periods], where T is the
@@ -81,7 +82,7 @@ class CLVModel:
         self,
         data: pandas.DataFrame,
         periods: int,
-        discount_rate: float
+        discount_rate: Real
     ) -> pandas.DataFrame:
         transactions = self.transactions_model.predict(data, periods)
         values = self.value_model.predict(data)
@@ -112,7 +113,7 @@ class CLVModel:
     @staticmethod
     def _compute_historic_clv(
         rfm_df: pandas.DataFrame,
-        discount_rate: float
+        discount_rate: Real
     ) -> pandas.DataFrame:
         alpha = 1 / (1 + discount_rate)
         return (

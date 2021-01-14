@@ -1,3 +1,4 @@
+from numbers import Real
 from typing import Optional
 import unittest
 
@@ -23,8 +24,8 @@ class TestCLVModel(unittest.TestCase):
 
     def _get_model(
         self,
-        global_mean: Optional[float] = 1,
-        mean_transaction_rate: Optional[float] = 1
+        global_mean: Optional[Real] = 1,
+        mean_transaction_rate: Optional[Real] = 1
     ) -> CLVModel:
         value_model = GlobalMeanValue(global_mean=global_mean)
         transactions_model = GlobalTransactionRateModel(

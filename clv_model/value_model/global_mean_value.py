@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from numbers import Real
 import typing
 
 import pandas
@@ -10,7 +11,7 @@ __all__ = ('GlobalMeanValue',)
 
 @dataclass
 class GlobalMeanValue(ValueModel):
-    global_mean: typing.Optional[float] = None
+    global_mean: typing.Optional[Real] = None
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> ValueModel:
         total_transactions = data.frequency.sum()

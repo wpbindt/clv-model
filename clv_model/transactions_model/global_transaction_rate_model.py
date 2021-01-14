@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from numbers import Real
 from typing import Optional
 
 import pandas
@@ -11,7 +12,7 @@ __all__ = ('GlobalTransactionRateModel',)
 
 @dataclass
 class GlobalTransactionRateModel(TransactionsModel):
-    mean_transaction_rate: Optional[float] = None
+    mean_transaction_rate: Optional[Real] = None
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
         if not self.is_fitted():
