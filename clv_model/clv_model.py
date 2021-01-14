@@ -87,7 +87,6 @@ class CLVModel:
         values = self.value_model.predict(data)
 
         alpha = 1 / (1 + discount_rate)
-
         discounted_time = (
             periods if alpha == 1
             else ((1 - alpha**periods) / (1 - alpha))

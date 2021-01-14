@@ -1,3 +1,4 @@
+from typing import Optional
 import unittest
 
 import pandas
@@ -20,10 +21,14 @@ class TestCLVModel(unittest.TestCase):
             }
         )
 
-    def _get_model(self) -> CLVModel:
-        value_model = GlobalMeanValue(global_mean=1)
+    def _get_model(
+        self,
+        global_mean: Optional[float] = 1,
+        mean_transaction_rate: Optional[float] = 1
+    ) -> CLVModel:
+        value_model = GlobalMeanValue(global_mean=global_mean)
         transactions_model = GlobalTransactionRateModel(
-            mean_transaction_rate=1
+            mean_transaction_rate=mean_transaction_rate
         )
         return CLVModel(
             value_model=value_model,
@@ -110,3 +115,16 @@ class TestCLVModel(unittest.TestCase):
             discount_rate=0.15
         )
         self.assertTrue(actual.empty)
+
+    def test_is_fitted(self) -> None:
+        model = self._get_model(global_mean=None, mean_transaction_rate=None)
+        self.assertFalse(model.is_fitted())
+
+        model = self._get_model(mean_transaction_rate=None)
+        self.assertFalse(model.is_fitted())
+
+        model = self._get_model(global_mean=None)
+        self.assertFalse(model.is_fitted())
+
+        model = self._get_model()
+        self.assertTrue(model.is_fitted())
