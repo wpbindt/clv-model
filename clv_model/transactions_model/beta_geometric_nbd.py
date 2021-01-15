@@ -3,10 +3,10 @@ import pandas
 from ..stan_model_base import Parameter, StanModelBase
 from .transactions_model import TransactionsModel
 
-__all__ = ('BetaGeometricNBDModel',)
+__all__ = ('BetaGeometricNBD',)
 
 
-class BetaGeometricNBDModel(
+class BetaGeometricNBD(
     StanModelBase,
     TransactionsModel,
     model_name='beta_geometric_nbd'

@@ -3,10 +3,10 @@ import pandas
 from ..stan_model_base import Parameter, StanModelBase
 from .value_model import ValueModel
 
-__all__ = ('GammaGammaModel',)
+__all__ = ('GammaGamma',)
 
 
-class GammaGammaModel(StanModelBase, ValueModel, model_name='gamma_gamma'):
+class GammaGamma(StanModelBase, ValueModel, model_name='gamma_gamma'):
     p: Parameter
     q: Parameter
     mu: Parameter

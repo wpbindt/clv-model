@@ -5,10 +5,10 @@ from scipy.special import gamma, hyp2f1
 from ..stan_model_base import Parameter, StanModelBase
 from .transactions_model import TransactionsModel
 
-__all__ = ('ParetoNBDModel',)
+__all__ = ('ParetoNBD',)
 
 
-class ParetoNBDModel(
+class ParetoNBD(
     StanModelBase,
     TransactionsModel,
     model_name='pareto_nbd'

@@ -6,7 +6,7 @@ import pandas
 from pandas.testing import assert_frame_equal
 
 from clv_model.clv_model import CLVModel
-from clv_model.transactions_model import GlobalTransactionRateModel
+from clv_model.transactions_model import GlobalTransactionRate
 from clv_model.value_model import GlobalMeanValue
 
 
@@ -28,7 +28,7 @@ class TestCLVModel(unittest.TestCase):
         mean_transaction_rate: Optional[Real] = 1
     ) -> CLVModel:
         value_model = GlobalMeanValue(global_mean=global_mean)
-        transactions_model = GlobalTransactionRateModel(
+        transactions_model = GlobalTransactionRate(
             mean_transaction_rate=mean_transaction_rate
         )
         return CLVModel(

@@ -3,10 +3,10 @@ import unittest
 import pandas
 from pandas.testing import assert_frame_equal
 
-from clv_model.transactions_model import GlobalTransactionRateModel
+from clv_model.transactions_model import GlobalTransactionRate
 
 
-class TestGlobalTransactionRateModel(unittest.TestCase):
+class TestGlobalTransactionRate(unittest.TestCase):
     def test_fit(self) -> None:
         data = pandas.DataFrame(
             data={
@@ -15,7 +15,7 @@ class TestGlobalTransactionRateModel(unittest.TestCase):
                 'T': [10, 2],
             }
         )
-        model = GlobalTransactionRateModel()
+        model = GlobalTransactionRate()
         model.fit(data)
 
         expected_mean_transaction_rate = (5 / 10 + 2 / 2) / 2
@@ -33,7 +33,7 @@ class TestGlobalTransactionRateModel(unittest.TestCase):
                 'T': [5, 10]
             }
         )
-        model = GlobalTransactionRateModel(0.5)
+        model = GlobalTransactionRate(0.5)
         actual = model.predict(
             data=data,
             periods=10
@@ -48,7 +48,7 @@ class TestGlobalTransactionRateModel(unittest.TestCase):
         assert_frame_equal(actual, expected, check_dtype=False)
 
     def test_is_fitted(self) -> None:
-        model = GlobalTransactionRateModel()
+        model = GlobalTransactionRate()
         self.assertFalse(model.is_fitted())
 
         model.mean_transaction_rate = 9

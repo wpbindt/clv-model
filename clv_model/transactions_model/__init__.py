@@ -1,12 +1,12 @@
-from .beta_geometric_nbd_model import BetaGeometricNBDModel
-from .global_transaction_rate_model import \
-    GlobalTransactionRateModel
-from .local_transaction_rate_model import LocalTransactionRateModel
-from .pareto_nbd_model import ParetoNBDModel
+from .beta_geometric_nbd import BetaGeometricNBD
+from .global_transaction_rate import \
+    GlobalTransactionRate
+from .local_transaction_rate import LocalTransactionRate
+from .pareto_nbd import ParetoNBD
 
 __all__ = (
-    'BetaGeometricNBDModel',
-    'GlobalTransactionRateModel',
-    'LocalTransactionRateModel',
-    'ParetoNBDModel',
+    'BetaGeometricNBD',
+    'GlobalTransactionRate',
+    'LocalTransactionRate',
+    'ParetoNBD',
 )

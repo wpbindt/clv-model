@@ -7,11 +7,11 @@ import pandas
 
 from .transactions_model import TransactionsModel
 
-__all__ = ('GlobalTransactionRateModel',)
+__all__ = ('GlobalTransactionRate',)
 
 
 @dataclass
-class GlobalTransactionRateModel(TransactionsModel):
+class GlobalTransactionRate(TransactionsModel):
     mean_transaction_rate: Optional[Real] = None
 
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:

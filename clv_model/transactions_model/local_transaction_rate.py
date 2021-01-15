@@ -4,11 +4,11 @@ import pandas
 
 from .transactions_model import TransactionsModel
 
-__all__ = ('LocalTransactionRateModel',)
+__all__ = ('LocalTransactionRate',)
 
 
 @dataclass
-class LocalTransactionRateModel(TransactionsModel):
+class LocalTransactionRate(TransactionsModel):
     def fit(self, data: pandas.DataFrame, **kwargs) -> TransactionsModel:
         return self
 
