@@ -21,4 +21,6 @@ class ValueModel(ABC):
 
     def _check_fit(self) -> None:
         if not self.is_fitted():
-            raise ValueError('Model is not fit.')
+            raise ValueError(
+                'Model must be fitted by calling fit before calling predict.'
+            )

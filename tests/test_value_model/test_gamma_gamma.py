@@ -41,3 +41,13 @@ class TestGammaGamma(unittest.TestCase):
         expected = pandas.DataFrame(columns=['id', 'value'])
 
         assert_frame_equal(actual, expected)
+
+    def test_predict_not_fitted(self) -> None:
+        model = GammaGamma()
+        data = pandas.DataFrame(columns={'id', 'frequency', 'value'})
+        with self.assertRaises(ValueError) as error:
+            model.predict(data)
+        self.assertEqual(
+            str(error.exception),
+            'Model must be fitted by calling fit before calling predict.'
+        )
