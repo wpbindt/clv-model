@@ -17,14 +17,19 @@ class GammaGamma(StanModelBase, ValueModel, model_name='gamma_gamma'):
         freq = data.frequency.values.reshape(-1, 1)
         val = data.value.values.reshape(-1, 1)
 
-        # posterior mean of E_{p, q, mu}(value | freq, mean_value)
+        # Posterior mean of E_{p, q, mu}(value | freq, mean_value). This is
+        # equation (5) in
+        # https://www.brucehardie.com/notes/025/gamma_gamma.pdf
         expected_value = (
             self.p * (self.mu + freq * val) / (self.p * freq + self.q - 1)
         ).mean(1)
 
-        return pandas.DataFrame(
-            data={
-                'id': data.customer_id,
-                'value': expected_value
-            }
+        return (
+            pandas.DataFrame(
+                data={
+                    'id': data.id,
+                    'value': expected_value
+                }
+            )
+            .round({'value': 2})
         )

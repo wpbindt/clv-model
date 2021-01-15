@@ -78,7 +78,7 @@ class CLVModel:
             pandas.concat([historic_clv, future_clv])
             .groupby('id', as_index=False, sort=False)
             .sum()
-            .assign(clv=lambda df: df.clv.round(2))
+            .round({'clv': 2})
         )
 
     def _compute_future_clv(
