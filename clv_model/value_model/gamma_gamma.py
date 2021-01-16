@@ -1,3 +1,5 @@
+from logging import Logger
+
 import pandas
 
 from ..stan_model_base import Parameter, StanModelBase
@@ -7,12 +9,21 @@ __all__ = ('GammaGamma',)
 
 
 class GammaGamma(StanModelBase, ValueModel, model_name='gamma_gamma'):
+    logger: Logger
     p: Parameter
     q: Parameter
     mu: Parameter
 
     def predict(self, data: pandas.DataFrame) -> pandas.DataFrame:
         self._check_fit()
+
+        if (self.q <= 1).any():
+            self.logger.warning(
+                'Posterior distribution for q contains values in (0, 1], '
+                'for which the conditional expectation of Gamma-Gamma is '
+                'not defined. Consider filtering these values out before '
+                'using the model.'
+            )
 
         freq = data.frequency.values.reshape(-1, 1)
         val = data.value.values.reshape(-1, 1)
