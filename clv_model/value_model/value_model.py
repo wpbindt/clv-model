@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 import pandas
 
+__all__ = ('ValueModel',)
+
 
 @dataclass
 class ValueModel(ABC):
