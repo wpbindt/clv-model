@@ -52,10 +52,7 @@ class ParetoNBD(
 
         return (
             data
-            .assign(
-                transactions=lambda df:
-                df.frequency + purchases_after_observation
-            )
+            .assign(transactions=lambda df: purchases_after_observation)
             [['id', 'transactions']]
         )
 
